@@ -1,8 +1,10 @@
 package com.example.loginapplication.ui
 
 import com.example.loginapplication.domain.AccountEntity
+import com.example.loginapplication.repo.AccountExistListener
 import com.example.loginapplication.repo.AccountRepo
 import com.example.loginapplication.repo.AccountRepoImplDummy
+import com.example.loginapplication.repo.AccountSaveListener
 import com.example.loginapplication.ui.LoginContract.Success
 import com.example.loginapplication.ui.LoginContract.Error
 import com.example.loginapplication.ui.LoginContract.LoadState
@@ -29,11 +31,11 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkValidSignIn(account: AccountEntity) {
-        if (!repo.isAccountExists(account)) {
-            view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR))
-        } else {
-            view?.setState(LoadState.Success(Success.SIGN_IN_SUCCESS))
+        val listener = object : AccountExistListener {
+            override fun onExist() { view?.setState(LoadState.Success(Success.SIGN_IN_SUCCESS)) }
+            override fun onNotExist() { view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR)) }
         }
+        repo.checkAccountExists(account, listener)
     }
 
     override fun onSignUp(login: String?, password: String?) {
@@ -44,14 +46,18 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkValidSignUp(account: AccountEntity) {
-        if (repo.isAccountExists(account)) {
-            view?.setState(LoadState.Error(Error.EXIST_ERROR))
-        } else signUpAccount(account)
+        val listener = object : AccountExistListener {
+            override fun onExist() { view?.setState(LoadState.Error(Error.EXIST_ERROR)) }
+            override fun onNotExist() { signUpAccount(account) }
+        }
+        repo.checkLoginExists(account.login, listener)
     }
 
     private fun signUpAccount(account: AccountEntity) {
-        repo.saveAccount(account)
-        view?.setState(LoadState.Success(Success.SIGN_UP_SUCCESS))
+        val listener = object : AccountSaveListener {
+            override fun onSaved() { view?.setState(LoadState.Success(Success.SIGN_UP_SUCCESS)) }
+        }
+        repo.saveAccount(account, listener)
     }
 
     override fun onForgotPassword(login: String?) {
@@ -62,11 +68,11 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkLoginRegistered(login: String) {
-        if (repo.isLoginExists(login)) {
-            view?.setState(LoadState.Success(Success.NEW_PASSWORD_SUCCESS))
-        } else {
-            view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR))
+        val listener = object : AccountExistListener {
+            override fun onExist() { view?.setState(LoadState.Success(Success.NEW_PASSWORD_SUCCESS)) }
+            override fun onNotExist() { view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR)) }
         }
+        repo.checkLoginExists(login, listener)
     }
 
     override fun onLoginTextChanged(login: String?) {
