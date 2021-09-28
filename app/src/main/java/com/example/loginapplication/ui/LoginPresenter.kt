@@ -3,6 +3,9 @@ package com.example.loginapplication.ui
 import com.example.loginapplication.domain.AccountEntity
 import com.example.loginapplication.repo.AccountRepo
 import com.example.loginapplication.repo.AccountRepoImplDummy
+import com.example.loginapplication.ui.LoginContract.Success
+import com.example.loginapplication.ui.LoginContract.Error
+import com.example.loginapplication.ui.LoginContract.LoadState
 
 class LoginPresenter : LoginContract.Presenter {
     private var view: LoginContract.View? = null
@@ -17,29 +20,41 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     override fun onSignIn(login: String?, password: String?) {
-        view?.setState(LoginContract.LoadState.Loading)
-        if (login == null || password == null) {
-            view?.setState(LoginContract.LoadState.Error(LoginContract.Error.NULL_ERROR))
+        view?.setState(LoadState.Loading)
+        if (login.isNullOrEmpty() || password.isNullOrEmpty()) {
+            view?.setState(LoadState.Error(Error.NULL_ERROR))
         } else if (!repo.isAccountExists(AccountEntity(login, password))) {
-            view?.setState(LoginContract.LoadState.Error(LoginContract.Error.NOT_EXIST_ERROR))
+            view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR))
         } else {
-            view?.setState(LoginContract.LoadState.Success(LoginContract.Success.SIGN_IN_SUCCESS))
+            view?.setState(LoadState.Success(Success.SIGN_IN_SUCCESS))
         }
     }
 
     override fun onSignUp(login: String?, password: String?) {
-        TODO("Not yet implemented")
+        view?.setState(LoadState.Loading)
+        if (login.isNullOrEmpty() || password.isNullOrEmpty()) {
+            view?.setState(LoadState.Error(Error.NULL_ERROR))
+        } else if (repo.isAccountExists(AccountEntity(login, password))) {
+            view?.setState(LoadState.Error(Error.EXIST_ERROR))
+        } else {
+            repo.saveAccount(AccountEntity(login, password))
+            view?.setState(LoadState.Success(Success.SIGN_UP_SUCCESS))
+        }
     }
 
-    override fun onForgotPassword() {
-        TODO("Not yet implemented")
+    override fun onForgotPassword(login: String?) {
+        view?.setState(LoadState.Loading)
+        when {
+            login.isNullOrEmpty() -> view?.setState(LoadState.Error(Error.NULL_LOGIN_ERROR))
+            repo.isLoginExists(login) -> view?.setState(LoadState.Success(Success.NEW_PASSWORD_SUCCESS))
+            else -> view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR))
+        }
     }
 
-    override fun onLoginTextChanged(login: String) {
-        TODO("Not yet implemented")
+    override fun onLoginTextChanged(login: String?) {
+
     }
 
-    override fun onPasswordTextChanged(toString: String) {
-        TODO("Not yet implemented")
+    override fun onPasswordTextChanged(password: String?) {
     }
 }

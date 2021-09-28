@@ -17,4 +17,12 @@ class AccountRepoImplDummy : AccountRepo {
             accountList.add(account)
         }
     }
+
+    override fun isLoginExists(login: String): Boolean {
+        for (account in accountList) {
+            if (account.login == login)
+                return true
+        }
+        return false
+    }
 }

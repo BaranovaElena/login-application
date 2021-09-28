@@ -6,6 +6,9 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import com.example.loginapplication.R
 import com.example.loginapplication.databinding.ActivityMainBinding
+import com.example.loginapplication.ui.LoginContract.Success
+import com.example.loginapplication.ui.LoginContract.Error
+import com.example.loginapplication.ui.LoginContract.LoadState
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
     private lateinit var binding: ActivityMainBinding
@@ -28,7 +31,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     private fun initButtonsListeners() {
         setSignInListener()
         setSignUpListener()
-        binding.forgotPasswordButton.setOnClickListener { presenter.onForgotPassword() }
+        binding.forgotPasswordButton.setOnClickListener {
+            presenter.onForgotPassword(binding.loginInputEditText.text.toString())
+        }
     }
 
     private fun setSignInListener() {
@@ -58,34 +63,50 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         }
     }
 
-    override fun setState(state: LoginContract.LoadState) {
-        binding.loginProgressBar.visibility = View.GONE
-        binding.stateTextView.setTextColor(getColor(R.color.error_text_color))
-        binding.stateTextView.text = null
+    override fun setState(state: LoadState) {
+        prepareToSetState()
+        setViewWithState(state)
+    }
 
+    private fun setViewWithState(state: LoadState) {
         when (state) {
-            is LoginContract.LoadState.Loading -> {
-                binding.loginProgressBar.visibility = View.VISIBLE
-            }
-            is LoginContract.LoadState.Success -> {
-                binding.stateTextView.setTextColor(getColor(R.color.success_text_color))
-                when (state.type) {
-                    LoginContract.Success.SIGN_IN_SUCCESS ->
-                        binding.stateTextView.text = getString(R.string.sign_in_state_success)
-                    LoginContract.Success.SIGN_UP_SUCCESS ->
-                        binding.stateTextView.text = getString(R.string.sign_up_state_success)
-                }
-            }
-            is LoginContract.LoadState.Error -> {
-                when (state.type) {
-                    LoginContract.Error.NULL_ERROR ->
-                        binding.stateTextView.text = getString(R.string.login_state_error_null)
-                    LoginContract.Error.NOT_EXIST_ERROR ->
-                        binding.stateTextView.text = getString(R.string.login_state_error_not_exist)
-                    LoginContract.Error.EXIST_ERROR ->
-                        binding.stateTextView.text = getString(R.string.login_state_error_exist)
-                }
-            }
+            is LoadState.Loading -> binding.loginProgressBar.visibility = View.VISIBLE
+            is LoadState.Success -> setSuccessState(state.type)
+            is LoadState.Error -> setErrorState(state.type)
+        }
+    }
+
+    private fun setErrorState(error: Error) {
+        when (error) {
+            Error.NULL_ERROR -> showState(R.string.login_state_error_null)
+            Error.NOT_EXIST_ERROR -> showState(R.string.login_state_error_not_exist)
+            Error.EXIST_ERROR -> showState(R.string.login_state_error_exist)
+            Error.NULL_LOGIN_ERROR -> showState(R.string.forgot_password_no_email)
+        }
+    }
+
+    private fun showState(textId: Int) {
+        binding.stateTextView.text = getString(textId)
+    }
+
+    private fun setSuccessState(success: Success) {
+        binding.stateTextView.setTextColor(getColor(R.color.success_text_color))
+        showSuccess(success)
+    }
+
+    private fun showSuccess(success: Success) {
+        when (success) {
+            Success.SIGN_IN_SUCCESS -> showState(R.string.sign_in_state_success)
+            Success.SIGN_UP_SUCCESS -> showState(R.string.sign_up_state_success)
+            Success.NEW_PASSWORD_SUCCESS -> showState(R.string.forgot_password_ok_response)
+        }
+    }
+
+    private fun prepareToSetState() {
+        binding.apply {
+            loginProgressBar.visibility = View.GONE
+            stateTextView.setTextColor(getColor(R.color.error_text_color))
+            stateTextView.text = null
         }
     }
 
