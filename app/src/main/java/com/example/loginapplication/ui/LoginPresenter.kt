@@ -31,6 +31,14 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkValidSignIn(account: AccountEntity) {
+        if (isLoginValid(account.login) && isPasswordValid(account.password)) {
+            checkAccountExistsInRepo(account)
+        } else {
+            view?.setState(LoadState.Error(Error.NULL_ERROR))
+        }
+    }
+
+    private fun checkAccountExistsInRepo(account: AccountEntity) {
         val listener = object : AccountExistListener {
             override fun onExist() { view?.setState(LoadState.Success(Success.SIGN_IN_SUCCESS)) }
             override fun onNotExist() { view?.setState(LoadState.Error(Error.NOT_EXIST_ERROR)) }
@@ -46,6 +54,14 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkValidSignUp(account: AccountEntity) {
+        if (isLoginValid(account.login) && isPasswordValid(account.password)) {
+            checkLoginExistsInRepo(account)
+        } else {
+            view?.setState(LoadState.Error(Error.NULL_ERROR))
+        }
+    }
+
+    private fun checkLoginExistsInRepo(account: AccountEntity) {
         val listener = object : AccountExistListener {
             override fun onExist() { view?.setState(LoadState.Error(Error.EXIST_ERROR)) }
             override fun onNotExist() { signUpAccount(account) }
@@ -82,11 +98,15 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkLoginToValid(login: String) {
-        if (android.util.Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
+        if (isLoginValid(login)) {
             view?.showLoginError(false)
         } else {
             view?.showLoginError(true)
         }
+    }
+
+    private fun isLoginValid(login: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(login).matches()
     }
 
     override fun onPasswordTextChanged(password: String?) {
@@ -96,10 +116,14 @@ class LoginPresenter : LoginContract.Presenter {
     }
 
     private fun checkPasswordToValid(password: String) {
-        if (password.length < PASSWORD_LENGTH_MIN) {
-            view?.showPasswordError(true, PASSWORD_LENGTH_MIN)
-        } else {
+        if (isPasswordValid(password)) {
             view?.showPasswordError(false, PASSWORD_LENGTH_MIN)
+        } else {
+            view?.showPasswordError(true, PASSWORD_LENGTH_MIN)
         }
+    }
+
+    private fun isPasswordValid(password: String): Boolean {
+        return password.length >= PASSWORD_LENGTH_MIN
     }
 }
