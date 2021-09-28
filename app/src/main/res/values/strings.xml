@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Login Application</string>
+    <string name="app_name" translatable="false">Login Application</string>
+    <string name="login_text_input_layout_hint">Login (email)</string>
+    <string name="password_text_input_layout_hint">Password</string>
+    <string name="sign_in_button_text">Sign in</string>
+    <string name="sign_up_button_text">Sign up</string>
+    <string name="forgot_password_button_text">Forgot password?</string>
 </resources>

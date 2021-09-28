@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_text_input_layout_hint">Логин (email)</string>
+    <string name="password_text_input_layout_hint">Пароль</string>
+    <string name="sign_in_button_text">Войти</string>
+    <string name="sign_up_button_text">Регистрация</string>
+    <string name="forgot_password_button_text">Забыли пароль?</string>
+</resources>
