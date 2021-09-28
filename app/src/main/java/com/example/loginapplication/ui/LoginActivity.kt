@@ -110,6 +110,22 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         }
     }
 
+    override fun showPasswordError(isError: Boolean, length: Int) {
+        if (isError) {
+            binding.passwordTextInputLayout.error = "${getString(R.string.password_not_valid)} $length"
+        } else {
+            binding.passwordTextInputLayout.error = null
+        }
+    }
+
+    override fun showLoginError(isError: Boolean) {
+        if (isError) {
+            binding.loginTextInputLayout.error = getString(R.string.login_not_valid)
+        } else {
+            binding.loginTextInputLayout.error = null
+        }
+    }
+
     override fun onDestroy() {
         presenter.onDetach()
         super.onDestroy()

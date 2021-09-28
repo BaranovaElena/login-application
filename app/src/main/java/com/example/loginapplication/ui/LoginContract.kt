@@ -15,6 +15,8 @@ class LoginContract {
 
     interface View {
         fun setState(state: LoadState)
+        fun showPasswordError(isError: Boolean, length: Int)
+        fun showLoginError(isError: Boolean)
     }
 
     interface Presenter {

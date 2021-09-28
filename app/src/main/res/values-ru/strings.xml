@@ -5,11 +5,13 @@
     <string name="sign_in_button_text">Войти</string>
     <string name="sign_up_button_text">Регистрация</string>
     <string name="forgot_password_button_text">Забыли пароль?</string>
-    <string name="sign_in_state_success">Sign in success!</string>
-    <string name="sign_up_state_success">Sign up success!</string>
-    <string name="login_state_error_null">Enter login and password!</string>
-    <string name="login_state_error_exist">Account is already exist!</string>
-    <string name="login_state_error_not_exist">Account does not exist!</string>
-    <string name="forgot_password_ok_response">New password was sent to your email</string>
-    <string name="forgot_password_no_email">Please enter yor email</string>
+    <string name="sign_in_state_success">Успешный вход!</string>
+    <string name="sign_up_state_success">Успешная регистрация!</string>
+    <string name="login_state_error_null">Введите логин и пароль!</string>
+    <string name="login_state_error_exist">Аккаунт уже существует!</string>
+    <string name="login_state_error_not_exist">Аккаунт не существует!</string>
+    <string name="forgot_password_ok_response">Новый пароль был отправлен на Ваш email</string>
+    <string name="forgot_password_no_email">Пожалуйста введите Ваш email</string>
+    <string name="password_not_valid">Минимальная длина </string>
+    <string name="login_not_valid">Логин должен быть в формате e-mail</string>
 </resources>
