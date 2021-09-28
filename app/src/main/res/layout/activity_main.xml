@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.LoginActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/login_text_input_layout"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_text_input_edit_text"
+            android:id="@+id/login_input_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -24,15 +24,16 @@
         android:id="@+id/password_text_input_layout"
         style="@style/ChainOutlinedBox"
         android:hint="@string/password_text_input_layout_hint"
-        android:layout_marginTop="@dimen/password_text_input_layout_margin_top"
+        app:endIconMode="password_toggle"
         app:layout_constraintBottom_toBottomOf="@id/sign_in_button"
         app:layout_constraintTop_toBottomOf="@+id/login_text_input_layout"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_text_input_edit_text"
+            android:id="@+id/password_input_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -86,7 +87,7 @@
         android:visibility="gone"/>
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/error_text_view"
+        android:id="@+id/state_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +95,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="@integer/login_root_width_percent"
         android:layout_marginBottom="@dimen/error_text_view_margin_bottom"
-        android:textColor="@color/error_text_color"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="@dimen/state_text_view_text_size"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

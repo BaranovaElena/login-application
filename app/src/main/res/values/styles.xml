@@ -6,5 +6,6 @@
         <item name="layout_constraintVertical_chainStyle">packed</item>
         <item name="layout_constraintWidth_percent">@integer/login_root_width_percent</item>
         <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="errorEnabled">true</item>
     </style>
 </resources>
