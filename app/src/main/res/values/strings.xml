@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">Login Application</string>
+    <string name="app_name" translatable="false">Login Application</string>
+    <string name="login_text_input_layout_hint">Login (email)</string>
+    <string name="password_text_input_layout_hint">Password</string>
+    <string name="sign_in_button_text">Sign in</string>
+    <string name="sign_up_button_text">Sign up</string>
+    <string name="forgot_password_button_text">Forgot password?</string>
+    <string name="sign_in_state_success">Sign in success!</string>
+    <string name="sign_up_state_success">Sign up success!</string>
+    <string name="login_state_error_null">Enter correct login and password!</string>
+    <string name="login_state_error_exist">Account is already exist!</string>
+    <string name="login_state_error_not_exist">Account does not exist!</string>
+    <string name="forgot_password_ok_response">New password was sent to your email</string>
+    <string name="forgot_password_no_email">Please enter your email</string>
+    <string name="password_not_valid">Minimum length is </string>
+    <string name="login_not_valid">Login should has e-mail format</string>
 </resources>
